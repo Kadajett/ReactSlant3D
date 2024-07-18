@@ -1,0 +1,33 @@
+{
+  "name": "react-slant-3d",
+  "version": "1.0.0",
+  "description": "React hooks for the Slant 3D API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run generate-api && npm run build",
+    "generate-api": "npx openapi-typescript-codegen --input ./spec.yaml --output ./src/api"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "react",
+    "slant3d",
+    "3d printing"
+  ],
+  "author": "Kadajett",
+  "license": "MIT",
+  "dependencies": {
+    "openapi-typescript-codegen": "^0.29.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0"
+  }
+}

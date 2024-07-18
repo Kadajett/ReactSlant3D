@@ -1,0 +1,56 @@
+name: Sync Fork and Regenerate Types
+
+on:
+  # Runs every day at 1 AM UTC
+  schedule:
+    - cron: "0 1 * * *"
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  sync-and-regenerate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Sync fork
+        run: |
+          git remote add upstream git@github.com:NateXVI/slant3d-api-spec.git
+          git fetch upstream
+          git checkout main
+          git merge upstream/main
+          git push origin main
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Regenerate types
+        run: npm run generate-api
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Auto-regenerate types after syncing fork"
+
+      - name: Push changes
+        if: steps.git-check.outputs.changes == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
