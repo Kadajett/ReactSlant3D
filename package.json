@@ -1,12 +1,14 @@
 {
   "name": "react-slant-3d",
-  "version": "1.0.0",
-  "description": "React hooks for the Slant 3D API",
+  "version": "0.0.1",
+  "description": "React hooks for the Slant 3D API. Auto generated types from https://github.com/NateXVI/slant3d-api-spec",
   "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "type": "module",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "npm run generate-api && npm run build",
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build",
     "generate-api": "npx openapi-typescript-codegen --input ./spec.yaml --output ./src/api"
   },
   "peerDependencies": {
@@ -24,10 +26,20 @@
   "author": "Kadajett",
   "license": "MIT",
   "dependencies": {
-    "openapi-typescript-codegen": "^0.29.0"
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "openapi-typescript-codegen": "^0.29.0",
+    "rollup": "^4.18.1",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.3"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kadajett/ReactSlant3D"
   }
 }
